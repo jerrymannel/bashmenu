@@ -1,6 +1,6 @@
 #!/bin/bash
 
-function bashMenu(){
+bashMenu(){
 
   location=$1
   flags="-l"
@@ -39,7 +39,7 @@ function bashMenu(){
   done
 }
 
-function renderMenu(){
+renderMenu(){
   tput civis
   stty -echo
   finalMenuToRender=" "
@@ -61,7 +61,7 @@ function renderMenu(){
   stty echo
 }
 
-function changeDIR(){
+changeDIR(){
   count=1
   out=`echo $3 | cut -d, -f$count`
   while [ $out ]
