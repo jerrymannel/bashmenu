@@ -1,17 +1,24 @@
 #!/bin/bash
 
 function bashMenu(){
-  LOCATION=$1  
-  TOTAL_DIRS=`ls -l $LOCATION | grep ^d | awk '{print $9}' | wc -l | tr -d " "` 
-  LIST_OF_DIRS=`ls -l $LOCATION | grep ^d | awk '{print $9}' | tr -s "\n" ","`
+
+  location=$1
+  flags="-l"
+  if [ $1 == "-a" ]; then
+    location=$2
+    flags=$flags"a"
+  fi
+
+  total_dirs=`ls $flags $location | grep ^d | awk '{print $9}' | wc -l | tr -d " "` 
+  list_of_dirs=`ls $flags $location | grep ^d | awk '{print $9}' | tr -s "\n" ","`
   
   selection=1
-  renderMenu 1 $LIST_OF_DIRS
+  renderMenu 1 $list_of_dirs
   while true
   do
   read -sn1 t
   if [ -z "$t" ]; then
-    changeDIR $selection $LOCATION $LIST_OF_DIRS
+    changeDIR $selection $location $list_of_dirs
     break
   else
     if [ $t == 'A' ]; then
@@ -20,14 +27,14 @@ function bashMenu(){
     if [ $t == 'B' ]; then
       selection=$[$selection + 1]
     fi
-    if [ $selection -gt $TOTAL_DIRS ]; then
-      selection=$[selection - TOTAL_DIRS]
+    if [ $selection -gt $total_dirs ]; then
+      selection=$[selection - total_dirs]
     fi
     if [ $selection -lt 1 ]; then
-      selection=$[TOTAL_DIRS - selection]
+      selection=$[total_dirs - selection]
     fi
-    echo -en "\033["$TOTAL_DIRS"A"
-    renderMenu $selection $LIST_OF_DIRS
+    echo -en "\033["$total_dirs"A"
+    renderMenu $selection $list_of_dirs
   fi
   done
 }
@@ -61,6 +68,7 @@ function changeDIR(){
   do
     if [ $1 == $count ]; then
       echo "Switching to $out."
+      echo "$2$out"
       cd "$2$out"
     fi
     count=$[$count + 1]
