@@ -9,8 +9,8 @@ bashMenu(){
     flags=$flags"a"
   fi
 
-  total_dirs=`ls $flags $location | grep ^d | awk '{print $9}' | wc -l | tr -d " "` 
-  list_of_dirs=`ls $flags $location | grep ^d | awk '{print $9}' | tr -s "\n" ","`
+  total_dirs=$(ls $flags $location | grep ^d | awk '{print $9}' | wc -l | tr -d " ") 
+  list_of_dirs=$(ls $flags $location | grep ^d | awk '{print $9}' | tr -s "\n" ",")
   
   selection=1
   renderMenu 1 $list_of_dirs
@@ -44,7 +44,7 @@ renderMenu(){
   stty -echo
   finalMenuToRender=" "
   count=1
-  out=`echo $2 | cut -d, -f$count`
+  out=$(echo $3 | cut -d, -f$count)
   while [ $out ]
   do
     if [ $1 -eq $count ]; then
@@ -53,7 +53,7 @@ renderMenu(){
       finalMenuToRender="$finalMenuToRender[ ] $out \n"
     fi
     count=$[$count + 1]
-    out=`echo $2 | cut -d, -f$count`
+    out=$(echo $3 | cut -d, -f$count)
   done
   echo -e $finalMenuToRender
   echo -en "\033[1A"
@@ -63,7 +63,7 @@ renderMenu(){
 
 changeDIR(){
   count=1
-  out=`echo $3 | cut -d, -f$count`
+  out=$(echo $3 | cut -d, -f$count)
   while [ $out ]
   do
     if [ $1 == $count ]; then
@@ -72,6 +72,6 @@ changeDIR(){
       cd "$2$out"
     fi
     count=$[$count + 1]
-    out=`echo $3 | cut -d, -f$count`
+    out=$(echo $3 | cut -d, -f$count)
   done
 }
